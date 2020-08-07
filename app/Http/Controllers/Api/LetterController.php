@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreLetter;
+use App\Http\Requests\UpdateLetter;
 use App\Letter;
 use App\Http\Resources\LetterResource;
 
@@ -16,14 +17,16 @@ class LetterController extends Controller
         return LetterResource::collection($letters);
     }
 
-    public function store(Request $request)
+    public function store(StoreLetter $request)
     {
-        $this->validate($request, [
-            "no_surat" => "required",
-            "tanggal_kirim" => "required",
-            "pengirim" => "required",
-            "perihal" => "required"
-        ]);
+        // $this->validate($request, [
+        //     "no_surat" => "required",
+        //     "tanggal_kirim" => "required",
+        //     "pengirim" => "required",
+        //     "perihal" => "required"
+        // ]);
+
+        $request->validate();
 
         $letter = Letter::create([
             "no_surat" => $request->no_surat,
@@ -35,8 +38,10 @@ class LetterController extends Controller
         return new LetterResource($letter);
     }
 
-    public function update(Request $request, Letter $letter)
+    public function update(UpdateLetter $request, Letter $letter)
     {
+        // $request->validate();
+
         $letter->update([
             "pengirim" => $request->pengirim,
             "perihal" => $request->perihal
